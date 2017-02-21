@@ -1,10 +1,6 @@
-TFC Pewter
+TFC Metals Index
 ================
 
 For TFC 0.79.29
 
-This adds Pewter as a new alloy, made of (mostly) tin and (some) copper. 
-
-You can make Pewter into jugs (which never break and hold more water) or bowls (which never break but have to be washed)
-
-Now on GitHub!
+This mod expands the TFC Metal system like the crops system so people don't have to worry about IDs or custom trapdoor rendering or anything - they can just pass a bunch of parameters in and create new metals.
