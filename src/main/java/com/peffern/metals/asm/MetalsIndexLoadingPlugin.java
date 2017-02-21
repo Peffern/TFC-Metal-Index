@@ -10,7 +10,7 @@ public class MetalsIndexLoadingPlugin implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass() 
 	{
-		return new String[]{ClientProxyCT.class.getName(), BlockSetupCT.class.getName(), RecipesCT.class.getName()};
+		return new String[]{ClientProxyCT.class.getName(), BlockSetupCT.class.getName(), RecipesCT.class.getName(), WAILADataCT.class.getName()};
 	}
 
 	@Override

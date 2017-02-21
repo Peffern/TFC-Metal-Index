@@ -1,18 +1,12 @@
 package com.peffern.metals;
 
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import com.bioxx.tfc.TerraFirmaCraft;
-import com.bioxx.tfc.Blocks.BlockMetalTrapDoor;
+import com.bioxx.tfc.Blocks.BlockMetalSheet;
 import com.bioxx.tfc.Core.Recipes;
-import com.bioxx.tfc.Core.TFC_Core;
-import com.bioxx.tfc.TileEntities.TEMetalTrapDoor;
 import com.bioxx.tfc.api.TFCBlocks;
 import com.bioxx.tfc.api.Crafting.AnvilManager;
 import com.bioxx.tfc.api.Crafting.AnvilRecipe;
@@ -26,8 +20,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -53,7 +45,7 @@ public class TFCMetalIndex
 	public static final String MODNAME = "TFC Metal Index";
 	
 	/** Mod Version */
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "1.1";
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
@@ -66,8 +58,6 @@ public class TFCMetalIndex
 		
 		MinecraftForge.EVENT_BUS.register(new ChunkEventHandler());
 		
-		FMLInterModComms.sendMessage("Waila", "register", "com.peffern.metals.WAILAData.callbackRegister");
-
 	}
 	
 	public static void anvilInit(World world)
@@ -147,6 +137,20 @@ public class TFCMetalIndex
 		return currenttip;
 	}*/
 
+	public static String s(IWailaDataAccessor a)
+	{
+		NBTTagCompound tag = a.getNBTData();
+		ItemStack sheetStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("sheetType"));
+		String[] names = ((BlockMetalSheet)TFCBlocks.metalSheet).metalNames;
+		int v = sheetStack.getItemDamage() & 31;
+		if(v < names.length)
+			return names[v];
+		else
+		{
+			IMetal metalObj = MetalsRegistry.getMetal(v);
+			return metalObj.getMetalName();
+		}
+	}
 	
 	
 }

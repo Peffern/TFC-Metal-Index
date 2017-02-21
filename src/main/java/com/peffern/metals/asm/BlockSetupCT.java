@@ -2,8 +2,6 @@ package com.peffern.metals.asm;
 
 import java.util.ListIterator;
 
-import javax.swing.JOptionPane;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;

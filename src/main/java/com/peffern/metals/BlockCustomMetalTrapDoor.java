@@ -34,7 +34,6 @@ public class BlockCustomMetalTrapDoor extends BlockMetalTrapDoor
 				return icons[v];
 			else
 			{
-				System.out.println(v);
 				IMetal metalObj = MetalsRegistry.getMetal(v);
 				return metalObj.getTrapDoorIcon();
 			}
@@ -53,7 +52,6 @@ public class BlockCustomMetalTrapDoor extends BlockMetalTrapDoor
 			return icons[v];
 		else
 		{
-			System.out.println("m"+v);
 			IMetal metalObj = MetalsRegistry.getMetal(v);
 			return metalObj.getTrapDoorIcon();
 		}
