@@ -4,10 +4,13 @@ import com.bioxx.tfc.Core.Metal.Alloy.EnumTier;
 import com.bioxx.tfc.api.Crafting.AnvilReq;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 
 public interface IMetal
 {
+	public Item getExistingIngotItem();
+	
 	public IIcon getSheetBlockIcon();
 	
 	public IIcon getTrapDoorIcon();

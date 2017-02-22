@@ -4,6 +4,7 @@ import com.bioxx.tfc.Core.Metal.Alloy.EnumTier;
 import com.bioxx.tfc.api.Crafting.AnvilReq;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 
 public class BaseMetal implements IMetal
@@ -171,5 +172,10 @@ public class BaseMetal implements IMetal
 	public AnvilReq getReq()
 	{
 		return req;
+	}
+	
+	public Item getExistingIngotItem()
+	{
+		return null;
 	}
 }

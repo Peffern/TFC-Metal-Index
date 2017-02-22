@@ -56,6 +56,8 @@ public class TFCMetalIndex
 		
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 		
+		FMLCommonHandler.instance().bus().register(new CraftingHandler());
+		
 		MinecraftForge.EVENT_BUS.register(new ChunkEventHandler());
 		
 	}

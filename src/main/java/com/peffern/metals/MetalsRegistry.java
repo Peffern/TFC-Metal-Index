@@ -29,6 +29,7 @@ public class MetalsRegistry
 	private static final Map<Integer,IMetal> METALS_MAP;
 	private static final Map<String, IMetal> METALS_DICT;
 	private static final Map<Integer,MetalData> METAL_ITEMS;
+	private static final Map<Item, MetalData> METALS_LOOKUP;
 	
 	private static AtomicInteger METAL_ID_COUNTER;
 	
@@ -39,6 +40,7 @@ public class MetalsRegistry
 		BlockMetalSheet delegate = new BlockMetalSheet();
 		METAL_ID_COUNTER = new AtomicInteger(delegate.metalNames.length);
 		METAL_ITEMS = new HashMap<Integer,MetalData>();
+		METALS_LOOKUP = new HashMap<Item,MetalData>();
 	}
 	
 	public static void registerIcons(IIconRegister register)
@@ -62,14 +64,26 @@ public class MetalsRegistry
 				this.itemIcon = register.registerIcon(metal.getUnshapedIcon());
 			}
 		}.setUnlocalizedName(metal.getUnshapedUName());
-		Item ingot = new ItemIngot()
+		Item ingot;
+		Item existingIngot = metal.getExistingIngotItem();
+		if(existingIngot != null)
 		{
-			@Override
-			public void registerIcons(IIconRegister register)
+			ingot = existingIngot;
+		}
+		else
+		{
+			ingot = new ItemIngot()
 			{
-				this.itemIcon = register.registerIcon(metal.getIngotIcon());
-			}
-		}.setUnlocalizedName(metal.getIngotUName());
+				@Override
+				public void registerIcons(IIconRegister register)
+				{
+					this.itemIcon = register.registerIcon(metal.getIngotIcon());
+				}
+			}.setUnlocalizedName(metal.getIngotUName());
+			GameRegistry.registerItem(ingot, ingot.getUnlocalizedName());
+			
+		}
+		
 		Item doubleIngot = new ItemIngot()
 		{
 			@Override
@@ -95,18 +109,23 @@ public class MetalsRegistry
 			}
 		}.setMetal(metal.getMetalName(), 400).setUnlocalizedName(metal.get2XSheetUName());
 		GameRegistry.registerItem(unshaped, unshaped.getUnlocalizedName());
-		GameRegistry.registerItem(ingot, ingot.getUnlocalizedName());
 		GameRegistry.registerItem(doubleIngot, doubleIngot.getUnlocalizedName());
 		GameRegistry.registerItem(sheet, sheet.getUnlocalizedName());
 		GameRegistry.registerItem(doubleSheet, doubleSheet.getUnlocalizedName());
 		Metal METAL = new Metal(metal.getMetalName(), unshaped, ingot);
 		MetalRegistry.instance.addMetal(METAL, metal.getTier());
-		Alloy alloy = new Alloy(METAL, metal.getTier());
-		for(Ingredient ingred : metal.getAlloyIngreds())
+		Ingredient[] ingreds = metal.getAlloyIngreds();
+		Alloy alloy = null;
+		if(ingreds != null && ingreds.length > 0)
 		{
-			alloy.addIngred(ingred.metal, ingred.min, ingred.max);
+			alloy = new Alloy(METAL, metal.getTier());
+			for(Ingredient ingred : ingreds)
+			{
+				alloy.addIngred(ingred.metal, ingred.min, ingred.max);
+			}
+			AlloyManager.INSTANCE.addAlloy(alloy);
 		}
-		AlloyManager.INSTANCE.addAlloy(alloy);
+		
 		
 		HeatRegistry manager = HeatRegistry.getInstance();
 		
@@ -127,6 +146,10 @@ public class MetalsRegistry
 		MetalData data = new MetalData(unshaped, ingot, doubleIngot, sheet, doubleSheet, METAL, alloy, raw);
 	
 		METAL_ITEMS.put(id,data);
+		if(existingIngot != null)
+		{
+			METALS_LOOKUP.put(existingIngot, data);
+		}
 		
 		return data;
 	}
@@ -139,6 +162,11 @@ public class MetalsRegistry
 	public static IMetal getMetal(String name)
 	{
 		return METALS_DICT.get(name);
+	}
+	
+	public static MetalData getMetal(Item item)
+	{
+		return METALS_LOOKUP.get(item);
 	}
 	
 	public static MetalData getData(int id)
