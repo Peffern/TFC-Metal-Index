@@ -2,6 +2,8 @@ package com.peffern.metals.asm;
 
 import java.util.ListIterator;
 
+import javax.swing.JOptionPane;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -35,7 +37,7 @@ public class BlockForgeCT implements IClassTransformer
 		
 		for(MethodNode m : classNode.methods)
 		{
-			if((m.name.equals("createNewTileEntity")) && m.desc.equals("(Lnet/minecraft/world/World;I)Lnet/minecraft/tileentity/TileEntity;"))
+			if((m.name.equals("createNewTileEntity") || m.name.equals("func_149915_a")) && m.desc.equals("(Lnet/minecraft/world/World;I)Lnet/minecraft/tileentity/TileEntity;"))
 			{
 				ListIterator<AbstractInsnNode> it = m.instructions.iterator();
 				//iterate over the bytecode instructions

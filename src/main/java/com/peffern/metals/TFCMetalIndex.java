@@ -62,9 +62,7 @@ public class TFCMetalIndex
 		FMLCommonHandler.instance().bus().register(new CraftingHandler());
 		
 		MinecraftForge.EVENT_BUS.register(new ChunkEventHandler());
-		
-		GameRegistry.registerTileEntity(TECustomForge.class, "TerraForgeCustom");
-		
+				
 	}
 	
 	public static void anvilInit(World world)
