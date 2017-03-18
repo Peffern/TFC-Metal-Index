@@ -56,9 +56,9 @@ public class CommonProxyCT implements IClassTransformer
 							}
 							else if(type.equals(Type.getType("Lcom/bioxx/tfc/TileEntities/TEForge;")))
 							{
-								LdcInsnNode newLinsn = new LdcInsnNode(Type.getType("Lcom/peffern/metals/TECustomForge;"));
+								/*LdcInsnNode newLinsn = new LdcInsnNode(Type.getType("Lcom/peffern/metals/TECustomForge;"));
 								m.instructions.insert(linsn,newLinsn);
-								m.instructions.remove(linsn);
+								m.instructions.remove(linsn);*/
 							}
 						}
 					}
