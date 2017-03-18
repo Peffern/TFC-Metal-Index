@@ -8,7 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 /**
- * Custom sheet - renders pewter
+ * Custom sheet - renders the new metals
  * @author peffern
  *
  */
@@ -20,6 +20,7 @@ public class BlockCustomMetalSheet extends BlockMetalSheet
 	{
 		super.registerBlockIcons(register);
 		
+		//setup icons
 		MetalsRegistry.registerIcons(register);
 	}
 	
@@ -30,9 +31,11 @@ public class BlockCustomMetalSheet extends BlockMetalSheet
 		if(te != null)
 		{
 			if(te.metalID < metalNames.length)
+				//old behavior
 				return super.getIcon(blockaccess, i, j, k, meta);
 			else
 			{
+				//new metals
 				IMetal metalObj = MetalsRegistry.getMetal(te.metalID);
 				return metalObj.getSheetBlockIcon();
 			}
@@ -48,7 +51,9 @@ public class BlockCustomMetalSheet extends BlockMetalSheet
 		if(meta >= 0)
 		{
 			if(meta < icons.length)
+				//old behavior
 				return super.getIcon(side, meta);
+			//new metals
 			IMetal metalObj = MetalsRegistry.getMetal(meta);
 			return metalObj.getSheetBlockIcon();
 

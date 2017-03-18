@@ -1,6 +1,7 @@
 package com.peffern.metals;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -20,7 +21,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author peffern
  *
  */
-@Mod(modid = TFCMetalIndex.MODID, name = TFCMetalIndex.MODNAME, version = TFCMetalIndex.VERSION, dependencies = "required-before:" + "terrafirmacraft" + ";" + "required-after:" + "Waila" + ";")
+@Mod(modid = TFCMetalIndex.MODID, name = TFCMetalIndex.MODNAME, version = TFCMetalIndex.VERSION, dependencies = "required-before:" + "terrafirmacraft" + ";" + "after:" + "Waila" + ";")
 public class TFCMetalIndex 
 {
 	
@@ -45,17 +45,19 @@ public class TFCMetalIndex
 	public static final String MODNAME = "TFC Metal Index";
 	
 	/** Mod Version */
-	public static final String VERSION = "1.1";
+	public static final String VERSION = "1.2";
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
+		//anvil setup things
 		TerraFirmaCraft.PACKET_PIPELINE.registerPacket(InitClientWorldPacket.class);
 		
 		FMLCommonHandler.instance().bus().register(new PlayerTracker());
 		
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 		
+		//mold crafting thing
 		FMLCommonHandler.instance().bus().register(new CraftingHandler());
 		
 		MinecraftForge.EVENT_BUS.register(new ChunkEventHandler());
@@ -85,15 +87,15 @@ public class TFCMetalIndex
 			
 			try
 			{
-				//pewter sheet trapdoords
+				//trapdoords
 				Method addTrapDoor = Recipes.class.getDeclaredMethod("addTrapDoor", Item.class, int.class);
 				addTrapDoor.setAccessible(true);
 				addTrapDoor.invoke(Recipes.class, m.sheet, i);
 			}
-			/*catch(InvocationTargetException ex)
+			catch(InvocationTargetException ex)
 			{
 				ex.getTargetException().printStackTrace();
-			}*/
+			}
 			catch(Exception ex)
 			{
 				ex.printStackTrace();
@@ -103,6 +105,7 @@ public class TFCMetalIndex
 		anvilInit = true;
 	}
 	
+	//ASM recovery
 	public static void addTrapDoors(AnvilManager manager, Item sheet, int index)
 	{
 		for(Map.Entry<Integer,MetalData> e : MetalsRegistry.enumerate())
@@ -113,44 +116,28 @@ public class TFCMetalIndex
 
 		}
 	}
-	
-	/**
-	 * Get the ItemStack to show in Waila when you look at a Crop
-	 * @param accessor Waila block accessor
-	 * @param config Waila config
-	 * @return the display stack
-	 */
-	/*public static List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-	{
-		JOptionPane.showMessageDialog(null, "WAILA'D");
-		NBTTagCompound tag = accessor.getNBTData();
-		ItemStack sheetStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("sheetType"));
-		int v = sheetStack.getItemDamage() & 31;
-		String metalType;
-		if(v < BlockMetalTrapDoor.metalNames.length)
-			metalType = BlockMetalTrapDoor.metalNames[v];
-		else
-		{
-			IMetal metalObj = MetalsRegistry.getMetal(v);
-			metalType = metalObj.getMetalName();
-		}
-		
-		currenttip.add(TFC_Core.translate("gui.metal." + metalType.replaceAll("\\s", "")));
-		return currenttip;
-	}*/
 
-	public static String s(IWailaDataAccessor a)
+	//this is an extremely fragile ASM recovery - I think WAILA is swallowing exceptions so it's very hard to figure out when something breaks.
+	public static String s(Object a)
 	{
-		NBTTagCompound tag = a.getNBTData();
-		ItemStack sheetStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("sheetType"));
-		String[] names = ((BlockMetalSheet)TFCBlocks.metalSheet).metalNames;
-		int v = sheetStack.getItemDamage() & 31;
-		if(v < names.length)
-			return names[v];
-		else
+		try
 		{
-			IMetal metalObj = MetalsRegistry.getMetal(v);
-			return metalObj.getMetalName();
+			Method getNBTData = a.getClass().getDeclaredMethod("getNBTData", new Class<?>[0]);
+			NBTTagCompound tag = (NBTTagCompound)getNBTData.invoke(a,new Object[0]);
+			ItemStack sheetStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("sheetType"));
+			String[] names = ((BlockMetalSheet)TFCBlocks.metalSheet).metalNames;
+			int v = sheetStack.getItemDamage() & 31;
+			if(v < names.length)
+				return names[v];
+			else
+			{
+				IMetal metalObj = MetalsRegistry.getMetal(v);
+				return metalObj.getMetalName();
+			}
+		}
+		catch(Exception ex)
+		{
+			return "<ERROR>";
 		}
 	}
 	

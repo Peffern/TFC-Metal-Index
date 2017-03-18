@@ -14,6 +14,7 @@ public class ServerTickHandler
     @SubscribeEvent 
     public void onServerWorldTick(WorldTickEvent e) 
     { 
+    	//do anvil on world start
         if (e.phase == Phase.START) 
         { 
         	if (e.world.provider.dimensionId == 0)

@@ -1,27 +1,15 @@
 package com.peffern.metals;
 
-import java.util.List;
-
-import com.bioxx.tfc.TerraFirmaCraft;
-import com.bioxx.tfc.Core.Recipes;
 import com.bioxx.tfc.Core.TFC_Core;
 import com.bioxx.tfc.Core.TFC_Sounds;
-import com.bioxx.tfc.Core.Player.PlayerInventory;
-import com.bioxx.tfc.Handlers.Network.AbstractPacket;
-import com.bioxx.tfc.Handlers.Network.PlayerUpdatePacket;
-import com.bioxx.tfc.Items.ItemIngot;
-import com.bioxx.tfc.Items.ItemMeltedMetal;
-import com.bioxx.tfc.api.TFCBlocks;
 import com.bioxx.tfc.api.TFCItems;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class CraftingHandler 
 {
@@ -38,6 +26,7 @@ public class CraftingHandler
 
 			if (!player.worldObj.isRemote)
 			{
+				//when you pull an ingot out of a mold
 				MetalData data = MetalsRegistry.getMetal(item);
 				if(data != null)
 				{
@@ -48,6 +37,7 @@ public class CraftingHandler
 							continue;
 						else if (is.getItem().equals(data.unshaped))
 						{
+							//give the player the mold back
 							if (player.worldObj.rand.nextInt(20) == 0)
 								player.worldObj.playSoundAtEntity(player, TFC_Sounds.CERAMICBREAK, 0.7f, player.worldObj.rand.nextFloat() * 0.2F + 0.8F);
 							else

@@ -7,6 +7,12 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 
+/**
+ * Metal parameters interface.
+ * base implementation provided
+ * @author peffern
+ *
+ */
 public interface IMetal
 {
 	public Item getExistingIngotItem();

@@ -1,23 +1,10 @@
 package com.peffern.metals;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-
-import javax.swing.JOptionPane;
-
-import com.bioxx.tfc.Core.TFC_Climate;
-import com.bioxx.tfc.Core.TFC_Core;
-import com.bioxx.tfc.Core.Metal.MetalPair;
-import com.bioxx.tfc.Core.Metal.MetalRegistry;
 import com.bioxx.tfc.Items.ItemMeltedMetal;
 import com.bioxx.tfc.TileEntities.TECrucible;
-import com.bioxx.tfc.TileEntities.TEForge;
 import com.bioxx.tfc.api.HeatRaw;
 import com.bioxx.tfc.api.Metal;
-import com.bioxx.tfc.api.TFCBlocks;
-import com.bioxx.tfc.api.TFCItems;
-import com.bioxx.tfc.api.TFCOptions;
-import com.bioxx.tfc.api.TFC_ItemHeat;
 import com.bioxx.tfc.api.Interfaces.ISmeltable;
 
 import net.minecraft.item.Item;
@@ -36,20 +23,25 @@ public class TECustomCrucible extends TECrucible
 			{
 				
 				Item itemToSmelt = stackToSmelt.getItem();
+				//if the item fails to be any tfc items
 				if(!(itemToSmelt instanceof ItemMeltedMetal) && !(itemToSmelt instanceof ISmeltable))
 				{
+					//check to see if it's one of ours
 					MetalData data = MetalsRegistry.getMetal(itemToSmelt);
 					if(data != null)
 					{
 						HeatRaw raw = data.heatRaw;
 						try
 						{
+							//reflect on cook delay
 							Field cookDelay = TECrucible.class.getDeclaredField("cookDelay");
 							cookDelay.setAccessible(true);
 							int cd = ((Integer)cookDelay.get(this)).intValue();
+							
 							if(temperature >= raw.meltTemp && cd == 0)
 							{
 								Metal m = data.metal;
+								//must be an ingot from another mod that got 'ExpanderMetal'-ified
 								if(addMetal(m,100))
 								{
 									temperature *= 0.9f;

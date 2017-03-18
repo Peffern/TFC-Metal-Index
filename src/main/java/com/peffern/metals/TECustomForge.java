@@ -1,19 +1,9 @@
 package com.peffern.metals;
 
-import java.lang.reflect.Method;
-import java.util.Random;
-
-import javax.swing.JOptionPane;
-
-import com.bioxx.tfc.Items.ItemBloom;
-import com.bioxx.tfc.Items.ItemMeltedMetal;
 import com.bioxx.tfc.TileEntities.TEForge;
 import com.bioxx.tfc.api.HeatIndex;
 import com.bioxx.tfc.api.HeatRegistry;
 import com.bioxx.tfc.api.TFC_ItemHeat;
-import com.bioxx.tfc.api.Interfaces.ISmeltable;
-
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 
 public class TECustomForge extends TEForge
@@ -33,10 +23,13 @@ public class TECustomForge extends TEForge
 				
 				if(index.hasOutput())
 				{
+					//if it's one of ours
 					MetalData data = MetalsRegistry.getMetal(inputCopy.getItem());
 					if (data != null && temperature >= data.heatRaw.meltTemp)
 					{
 						
+						//it must be a metal ingot from another mod that had an ExpanderMetal
+						//so only one mold is required
 						ItemStack meltedItem = new ItemStack(data.unshaped);
 						TFC_ItemHeat.setTemp(meltedItem, temperature);
 						
@@ -45,6 +38,7 @@ public class TECustomForge extends TEForge
 						
 						if(moldIndex != -1)
 						{
+							//remove the mold
 							mold = fireItemStacks[moldIndex];
 							ItemStack moldIS = mold;
 							ItemStack outputCopy = meltedItem.copy();

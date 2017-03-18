@@ -79,7 +79,7 @@ mv.visitEnd();
 		LabelNode l0 = new LabelNode();
 		m.instructions.add(l0);
 		m.instructions.add(new VarInsnNode(ALOAD, 3));
-		m.instructions.add(new MethodInsnNode(INVOKESTATIC, "com/peffern/metals/TFCMetalIndex", "s", "(Lmcp/mobius/waila/api/IWailaDataAccessor;)Ljava/lang/String;", false));
+		m.instructions.add(new MethodInsnNode(INVOKESTATIC, "com/peffern/metals/TFCMetalIndex", "s", "(Ljava/lang/Object;)Ljava/lang/String;", false));
 		m.instructions.add(new VarInsnNode(ASTORE,5));
 		LabelNode l1 = new LabelNode();
 		m.instructions.add(l1);

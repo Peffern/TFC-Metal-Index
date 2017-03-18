@@ -6,14 +6,21 @@ import com.bioxx.tfc.api.Metal;
 
 import net.minecraft.item.Item;
 
+/**
+ * Bundle class for return data of the metal registry
+ * @author peffern
+ *
+ */
 public class MetalData 
 {
+	//the items
 	public Item unshaped;
 	public Item ingot;
 	public Item ingot2X;
 	public Item sheet;
 	public Item sheet2X;
 	
+	//assorted registry things
 	public Metal metal;
 	
 	public Alloy alloy;

@@ -8,7 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 /**
- * Custom trapdoor - renders pewter
+ * Custom trapdoor - renders new metals
  * @author peffern
  *
  */
@@ -29,11 +29,13 @@ public class BlockCustomMetalTrapDoor extends BlockMetalTrapDoor
 		
 		if(te!= null && te.sheetStack != null)
 		{
+			//old behavior
 			int v = te.sheetStack.getItemDamage() & 31;
 			if (v < icons.length)
 				return icons[v];
 			else
 			{
+				//new metals
 				IMetal metalObj = MetalsRegistry.getMetal(v);
 				return metalObj.getTrapDoorIcon();
 			}
@@ -49,9 +51,11 @@ public class BlockCustomMetalTrapDoor extends BlockMetalTrapDoor
 	{
 		int v = meta & 31;
 		if (v < icons.length)
+			//old behaviors
 			return icons[v];
 		else
 		{
+			//new metals
 			IMetal metalObj = MetalsRegistry.getMetal(v);
 			return metalObj.getTrapDoorIcon();
 		}

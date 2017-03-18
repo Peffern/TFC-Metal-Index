@@ -24,8 +24,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Entry point class for the new metals
+ * @author peffern
+ *
+ */
 public class MetalsRegistry 
 {
+	//maps
 	private static final Map<Integer,IMetal> METALS_MAP;
 	private static final Map<String, IMetal> METALS_DICT;
 	private static final Map<Integer,MetalData> METAL_ITEMS;
@@ -56,6 +62,7 @@ public class MetalsRegistry
 		int id = (METAL_ID_COUNTER.getAndIncrement());
 		METALS_MAP.put(id, metal);
 		METALS_DICT.put(metal.getMetalName(), metal);
+		//make items
 		Item unshaped = new ItemMeltedMetal()
 		{
 			@Override
@@ -64,6 +71,7 @@ public class MetalsRegistry
 				this.itemIcon = register.registerIcon(metal.getUnshapedIcon());
 			}
 		}.setUnlocalizedName(metal.getUnshapedUName());
+		//handle ingot may already exist
 		Item ingot;
 		Item existingIngot = metal.getExistingIngotItem();
 		if(existingIngot != null)
@@ -83,7 +91,7 @@ public class MetalsRegistry
 			GameRegistry.registerItem(ingot, ingot.getUnlocalizedName());
 			
 		}
-		
+		//other items
 		Item doubleIngot = new ItemIngot()
 		{
 			@Override
@@ -112,12 +120,14 @@ public class MetalsRegistry
 		GameRegistry.registerItem(doubleIngot, doubleIngot.getUnlocalizedName());
 		GameRegistry.registerItem(sheet, sheet.getUnlocalizedName());
 		GameRegistry.registerItem(doubleSheet, doubleSheet.getUnlocalizedName());
+		//registrys
 		Metal METAL = new Metal(metal.getMetalName(), unshaped, ingot);
 		MetalRegistry.instance.addMetal(METAL, metal.getTier());
 		Ingredient[] ingreds = metal.getAlloyIngreds();
 		Alloy alloy = null;
 		if(ingreds != null && ingreds.length > 0)
 		{
+			//may be no alloy
 			alloy = new Alloy(METAL, metal.getTier());
 			for(Ingredient ingred : ingreds)
 			{

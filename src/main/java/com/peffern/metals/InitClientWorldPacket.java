@@ -16,6 +16,7 @@ public class InitClientWorldPacket extends AbstractPacket
 	@Override
 	public void handleClientSide(EntityPlayer player) 
 	{
+		//setup anvil on client load
 		TFCMetalIndex.anvilInit(player.worldObj); 
 	}
 

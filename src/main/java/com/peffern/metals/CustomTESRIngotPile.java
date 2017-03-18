@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Custom ingot pile tile entity
- * renders pewter properly
+ * renders new meatls properly
  * @author peffern
  *
  */
@@ -33,17 +33,20 @@ public class CustomTESRIngotPile extends TESRIngotPile
 			int i = ((BlockIngotPile) pile).getStack(te.getWorldObj(), te);
 			IMetal metal = MetalsRegistry.getMetal(te.type);
 			String dir;
-			if(metal == null)
-				dir = Reference.MOD_ID;
-			else
-				dir = metal.getResourceDir();
-			
 			String src;
 			if(metal == null)
+			{
+				//tfc metals
+				dir = Reference.MOD_ID;
 				src = "textures/blocks/metal/" + te.type + ".png";
+			}
 			else
+			{
+				//new metals
+				dir = metal.getResourceDir();
 				src = metal.getResource();
-			//get the resource directory - tfc's or mine depending on the metal
+			}
+			
 			//procede with rendering
 			TFC_Core.bindTexture(new ResourceLocation(dir, src));
 			GL11.glPushMatrix();

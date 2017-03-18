@@ -11,8 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
+/**
+ * Custom trapdoor renderer to support new metals
+ * @author peffern
+ *
+ */
 public class RenderCustomMetalTrapDoor extends RenderMetalTrapDoor
 {
+	//draw in inventory properly
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
 	{
@@ -23,8 +29,10 @@ public class RenderCustomMetalTrapDoor extends RenderMetalTrapDoor
 		IIcon[] icons = ((BlockMetalSheet)TFCBlocks.metalSheet).icons;
 		IIcon icon;
 		if(id < icons.length)
+			//old behavior
 			icon = icons[id];
 		else
+			//new behavior
 			icon = MetalsRegistry.getMetal(id).getSheetBlockIcon();
 		
 		renderInvBlock(block, icon, renderer);
@@ -32,6 +40,7 @@ public class RenderCustomMetalTrapDoor extends RenderMetalTrapDoor
 		renderInvBlock(block, icon, renderer);
 	}
 	
+	//draw in world
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
@@ -46,6 +55,7 @@ public class RenderCustomMetalTrapDoor extends RenderMetalTrapDoor
 				IIcon[] icons = ((BlockMetalSheet)TFCBlocks.metalSheet).icons;
 				if(v >= icons.length)
 				{
+					//hackitude: to avoid rewriting the whole render, just insert the icon into the array
 					IIcon[] icons2 = new IIcon[v+1];
 					System.arraycopy(icons, 0, icons2, 0, icons.length);
 					IMetal metalObj = MetalsRegistry.getMetal(v);
@@ -54,10 +64,13 @@ public class RenderCustomMetalTrapDoor extends RenderMetalTrapDoor
 					((BlockMetalSheet)TFCBlocks.metalSheet).icons = icons2;
 					
 				}
+				//call the renderer
 				boolean value = render(block, x, y, z, renderer);
 				
+				//then reset the array
 				((BlockMetalSheet)TFCBlocks.metalSheet).icons = icons;
 				
+				//sorry
 				return value;
 			}
 		}

@@ -15,6 +15,7 @@ public class ChunkEventHandler
     { 
         if (!e.world.isRemote && e.world.provider.dimensionId == 0) 
         { 
+        	//setup anvil on world load
             TFCMetalIndex.anvilInit(e.world); 
         } 
     } 
